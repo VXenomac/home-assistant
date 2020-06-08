@@ -42,10 +42,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Dovado sensor platform."""
     dovado = hass.data[DOVADO_DOMAIN]
 
-    entities = []
-    for sensor in config[CONF_SENSORS]:
-        entities.append(DovadoSensor(dovado, sensor))
-
+    entities = [DovadoSensor(dovado, sensor) for sensor in config[CONF_SENSORS]]
     add_entities(entities)
 
 

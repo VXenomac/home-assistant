@@ -17,10 +17,7 @@ async def async_setup_platform(
     sensors = discovery_info[CONF_SENSORS]
     ipcam = hass.data[DATA_IP_WEBCAM][host]
 
-    all_sensors = []
-
-    for sensor in sensors:
-        all_sensors.append(IPWebcamSensor(name, host, ipcam, sensor))
+    all_sensors = [IPWebcamSensor(name, host, ipcam, sensor) for sensor in sensors]
 
     async_add_entities(all_sensors, True)
 

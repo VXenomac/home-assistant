@@ -37,10 +37,7 @@ class DemoCover(CoverDevice):
         self._unsub_listener_cover_tilt = None
         self._is_opening = False
         self._is_closing = False
-        if position is None:
-            self._closed = True
-        else:
-            self._closed = self.current_cover_position <= 0
+        self._closed = True if position is None else self.current_cover_position <= 0
 
     @property
     def name(self):

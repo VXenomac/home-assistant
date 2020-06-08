@@ -83,7 +83,7 @@ class Geizwatch(Entity):
         """Return the state attributes."""
         while len(self._device.prices) < 4:
             self._device.prices.append('None')
-        attrs = {'device_name': self._device.name,
+        return {'device_name': self._device.name,
                  'description': self.description,
                  'unit_of_measurement': self._device.price_currency,
                  'product_id': self.product_id,
@@ -91,7 +91,6 @@ class Geizwatch(Entity):
                  'price2': self._device.prices[1],
                  'price3': self._device.prices[2],
                  'price4': self._device.prices[3]}
-        return attrs
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):

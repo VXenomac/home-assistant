@@ -59,8 +59,7 @@ async def auth_manager_from_config(
     for module in modules:
         module_hash[module.id] = module
 
-    manager = AuthManager(hass, store, provider_hash, module_hash)
-    return manager
+    return AuthManager(hass, store, provider_hash, module_hash)
 
 
 class AuthManager:
@@ -85,10 +84,10 @@ class AuthManager:
 
         Should be removed when we removed legacy_api_password auth providers.
         """
-        for provider_type, _ in self._providers:
-            if provider_type == 'legacy_api_password':
-                return True
-        return False
+        return any(
+            provider_type == 'legacy_api_password'
+            for provider_type, _ in self._providers
+        )
 
     @property
     def auth_providers(self) -> List[AuthProvider]:
@@ -469,8 +468,6 @@ class AuthManager:
         A user should be an owner if it is the first non-system user that is
         being created.
         """
-        for user in await self._store.async_get_users():
-            if not user.system_generated:
-                return False
-
-        return True
+        return all(
+            user.system_generated for user in await self._store.async_get_users()
+        )

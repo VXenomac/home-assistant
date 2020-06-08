@@ -22,10 +22,10 @@ async def async_setup_platform(
     sensors = discovery_info[CONF_SENSORS]
     amcrest = hass.data[DATA_AMCREST][device_name]
 
-    amcrest_sensors = []
-    for sensor_type in sensors:
-        amcrest_sensors.append(
-            AmcrestSensor(amcrest.name, amcrest.device, sensor_type))
+    amcrest_sensors = [
+        AmcrestSensor(amcrest.name, amcrest.device, sensor_type)
+        for sensor_type in sensors
+    ]
 
     async_add_entities(amcrest_sensors, True)
 

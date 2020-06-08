@@ -55,10 +55,9 @@ class CiscoMEDeviceScanner(DeviceScanner):
 
     def get_device_name(self, device):
         """Return the name of the given device or None if we don't know."""
-        name = next((
+        return next((
             result.clId for result in self.last_results
             if result.macaddr == device), None)
-        return name
 
     def get_extra_attributes(self, device):
         """

@@ -45,10 +45,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up an Arlo IP Camera."""
     arlo = hass.data[DATA_ARLO]
 
-    cameras = []
-    for camera in arlo.cameras:
-        cameras.append(ArloCam(hass, camera, config))
-
+    cameras = [ArloCam(hass, camera, config) for camera in arlo.cameras]
     add_entities(cameras)
 
 

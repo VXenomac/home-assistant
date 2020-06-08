@@ -26,11 +26,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     @callback
     def async_add_light(lights):
         """Add light from deCONZ."""
-        entities = []
+        entities = [
+            DeconzLight(light, gateway)
+            for light in lights
+            if light.type not in COVER_TYPES + SWITCH_TYPES
+        ]
 
-        for light in lights:
-            if light.type not in COVER_TYPES + SWITCH_TYPES:
-                entities.append(DeconzLight(light, gateway))
 
         async_add_entities(entities, True)
 
@@ -40,11 +41,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     @callback
     def async_add_group(groups):
         """Add group from deCONZ."""
-        entities = []
+        entities = [
+            DeconzLight(group, gateway)
+            for group in groups
+            if group.lights and gateway.allow_deconz_groups
+        ]
 
-        for group in groups:
-            if group.lights and gateway.allow_deconz_groups:
-                entities.append(DeconzLight(group, gateway))
 
         async_add_entities(entities, True)
 
@@ -163,8 +165,7 @@ class DeconzLight(DeconzDevice, Light):
     @property
     def device_state_attributes(self):
         """Return the device state attributes."""
-        attributes = {}
-        attributes['is_deconz_group'] = self._device.type == 'LightGroup'
+        attributes = {'is_deconz_group': self._device.type == 'LightGroup'}
         if self._device.type == 'LightGroup':
             attributes['all_on'] = self._device.all_on
         return attributes

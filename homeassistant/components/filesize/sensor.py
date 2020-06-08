@@ -63,8 +63,7 @@ class Filesize(Entity):
     def state(self):
         """Return the size of the file in MB."""
         decimals = 2
-        state_mb = round(self._size/1e6, decimals)
-        return state_mb
+        return round(self._size/1e6, decimals)
 
     @property
     def icon(self):
@@ -74,12 +73,11 @@ class Filesize(Entity):
     @property
     def device_state_attributes(self):
         """Return other details about the sensor state."""
-        attr = {
+        return {
             'path': self._path,
             'last_updated': self._last_updated,
             'bytes': self._size,
             }
-        return attr
 
     @property
     def unit_of_measurement(self):

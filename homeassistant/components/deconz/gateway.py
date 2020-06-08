@@ -147,9 +147,9 @@ class DeconzGateway:
         """Set up remote from deCONZ."""
         from pydeconz.sensor import SWITCH as DECONZ_REMOTE
         for sensor in sensors:
-            if sensor.type in DECONZ_REMOTE and \
-               not (not self.allow_clip_sensor and
-                    sensor.type.startswith('CLIP')):
+            if sensor.type in DECONZ_REMOTE and (
+                self.allow_clip_sensor or not sensor.type.startswith('CLIP')
+            ):
                 self.events.append(DeconzEvent(self.hass, sensor))
 
     @callback

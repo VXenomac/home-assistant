@@ -69,10 +69,7 @@ class CloudPreferences:
         if not enabled:
             return False
 
-        if self._has_local_trusted_network:
-            return False
-
-        return True
+        return not self._has_local_trusted_network
 
     @property
     def alexa_enabled(self):

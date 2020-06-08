@@ -16,9 +16,9 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     if discovery_info is None:
         return
     data = hass.data[BLINK_DATA]
-    devs = []
-    for name, camera in data.cameras.items():
-        devs.append(BlinkCamera(data, name, camera))
+    devs = [
+        BlinkCamera(data, name, camera) for name, camera in data.cameras.items()
+    ]
 
     add_entities(devs)
 

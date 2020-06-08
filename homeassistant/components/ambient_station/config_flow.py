@@ -12,9 +12,10 @@ from .const import CONF_APP_KEY, DOMAIN
 @callback
 def configured_instances(hass):
     """Return a set of configured Ambient PWS instances."""
-    return set(
+    return {
         entry.data[CONF_APP_KEY]
-        for entry in hass.config_entries.async_entries(DOMAIN))
+        for entry in hass.config_entries.async_entries(DOMAIN)
+    }
 
 
 @config_entries.HANDLERS.register(DOMAIN)

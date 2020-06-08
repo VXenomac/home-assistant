@@ -157,13 +157,11 @@ class CommandSensorData:
         else:
             rendered_args = None
 
-        if rendered_args == args:
-            # No template used. default behavior
-            shell = True
-        else:
+        if rendered_args != args:
             # Template used. Construct the string used in the shell
             command = str(' '.join([prog] + shlex.split(rendered_args)))
-            shell = True
+        # No template used. default behavior
+        shell = True
         try:
             _LOGGER.debug("Running command: %s", command)
             return_value = subprocess.check_output(

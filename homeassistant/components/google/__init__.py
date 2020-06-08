@@ -235,14 +235,13 @@ class GoogleCalendarService:
         from googleapiclient import discovery as google_discovery
         credentials = Storage(self.token_file).get()
         http = credentials.authorize(httplib2.Http())
-        service = google_discovery.build(
+        return google_discovery.build(
             'calendar', 'v3', http=http, cache_discovery=False)
-        return service
 
 
 def get_calendar_info(hass, calendar):
     """Convert data from Google into DEVICE_SCHEMA."""
-    calendar_info = DEVICE_SCHEMA({
+    return DEVICE_SCHEMA({
         CONF_CAL_ID: calendar['id'],
         CONF_ENTITIES: [{
             CONF_TRACK: calendar['track'],
@@ -251,7 +250,6 @@ def get_calendar_info(hass, calendar):
                 '{}', calendar['summary'], hass=hass),
         }]
     })
-    return calendar_info
 
 
 def load_config(path):

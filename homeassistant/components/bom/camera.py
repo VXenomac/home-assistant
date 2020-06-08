@@ -25,11 +25,12 @@ LOCATIONS = [
 
 
 def _validate_schema(config):
-    if config.get(CONF_LOCATION) is None:
-        if not all(config.get(x) for x in (CONF_ID, CONF_DELTA, CONF_FRAMES)):
-            raise vol.Invalid(
-                "Specify '{}', '{}' and '{}' when '{}' is unspecified".format(
-                    CONF_ID, CONF_DELTA, CONF_FRAMES, CONF_LOCATION))
+    if config.get(CONF_LOCATION) is None and not all(
+        config.get(x) for x in (CONF_ID, CONF_DELTA, CONF_FRAMES)
+    ):
+        raise vol.Invalid(
+            "Specify '{}', '{}' and '{}' when '{}' is unspecified".format(
+                CONF_ID, CONF_DELTA, CONF_FRAMES, CONF_LOCATION))
     return config
 
 

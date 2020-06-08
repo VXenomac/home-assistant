@@ -98,12 +98,10 @@ async def async_devices_sync(hass, data, payload):
 
         devices.append(serialized)
 
-    response = {
+    return {
         'agentUserId': data.context.user_id,
         'devices': devices,
     }
-
-    return response
 
 
 @HANDLERS.register('action.devices.QUERY')

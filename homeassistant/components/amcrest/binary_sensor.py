@@ -22,10 +22,10 @@ async def async_setup_platform(hass, config, async_add_devices,
     binary_sensors = discovery_info[CONF_BINARY_SENSORS]
     amcrest = hass.data[DATA_AMCREST][device_name]
 
-    amcrest_binary_sensors = []
-    for sensor_type in binary_sensors:
-        amcrest_binary_sensors.append(
-            AmcrestBinarySensor(amcrest.name, amcrest.device, sensor_type))
+    amcrest_binary_sensors = [
+        AmcrestBinarySensor(amcrest.name, amcrest.device, sensor_type)
+        for sensor_type in binary_sensors
+    ]
 
     async_add_devices(amcrest_binary_sensors, True)
 

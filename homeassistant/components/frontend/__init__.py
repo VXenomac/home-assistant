@@ -344,11 +344,7 @@ class AuthorizeView(HomeAssistantView):
         latest = self.repo_path is not None or \
             _is_latest(self.js_option, request)
 
-        if latest:
-            base = 'frontend_latest'
-        else:
-            base = 'frontend_es5'
-
+        base = 'frontend_latest' if latest else 'frontend_es5'
         location = "/{}/authorize.html{}".format(
             base, str(request.url.relative())[15:])
 

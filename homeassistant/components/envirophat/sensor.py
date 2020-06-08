@@ -97,37 +97,37 @@ class EnvirophatSensor(Entity):
         """Get the latest data and updates the states."""
         self.data.update()
 
-        if self.type == 'light':
-            self._state = self.data.light
-        if self.type == 'light_red':
-            self._state = self.data.light_red
-        if self.type == 'light_green':
-            self._state = self.data.light_green
-        if self.type == 'light_blue':
-            self._state = self.data.light_blue
         if self.type == 'accelerometer_x':
             self._state = self.data.accelerometer_x
-        if self.type == 'accelerometer_y':
+        elif self.type == 'accelerometer_y':
             self._state = self.data.accelerometer_y
-        if self.type == 'accelerometer_z':
+        elif self.type == 'accelerometer_z':
             self._state = self.data.accelerometer_z
-        if self.type == 'magnetometer_x':
+        elif self.type == 'light':
+            self._state = self.data.light
+        elif self.type == 'light_blue':
+            self._state = self.data.light_blue
+        elif self.type == 'light_green':
+            self._state = self.data.light_green
+        elif self.type == 'light_red':
+            self._state = self.data.light_red
+        elif self.type == 'magnetometer_x':
             self._state = self.data.magnetometer_x
-        if self.type == 'magnetometer_y':
+        elif self.type == 'magnetometer_y':
             self._state = self.data.magnetometer_y
-        if self.type == 'magnetometer_z':
+        elif self.type == 'magnetometer_z':
             self._state = self.data.magnetometer_z
-        if self.type == 'temperature':
-            self._state = self.data.temperature
-        if self.type == 'pressure':
+        elif self.type == 'pressure':
             self._state = self.data.pressure
-        if self.type == 'voltage_0':
+        elif self.type == 'temperature':
+            self._state = self.data.temperature
+        elif self.type == 'voltage_0':
             self._state = self.data.voltage_0
-        if self.type == 'voltage_1':
+        elif self.type == 'voltage_1':
             self._state = self.data.voltage_1
-        if self.type == 'voltage_2':
+        elif self.type == 'voltage_2':
             self._state = self.data.voltage_2
-        if self.type == 'voltage_3':
+        elif self.type == 'voltage_3':
             self._state = self.data.voltage_3
 
 

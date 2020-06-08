@@ -300,11 +300,7 @@ class ConfiguredDoorBird():
         if 'http' not in favs:
             return False
 
-        for fav in favs['http'].values():
-            if fav['value'] == ha_url:
-                return True
-
-        return False
+        return any(fav['value'] == ha_url for fav in favs['http'].values())
 
     def get_webhook_id(self, ha_url, favs=None) -> str or None:
         """
@@ -362,11 +358,7 @@ class DoorBirdRequestView(HomeAssistantView):
 
         doorstation = get_doorstation_by_slug(hass, sensor)
 
-        if doorstation:
-            event_data = doorstation.get_event_data()
-        else:
-            event_data = {}
-
+        event_data = doorstation.get_event_data() if doorstation else {}
         hass.bus.async_fire('{}_{}'.format(DOMAIN, sensor), event_data)
 
         return web.Response(status=200, text='OK')

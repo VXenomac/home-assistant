@@ -121,17 +121,17 @@ class DwdWeatherWarningsSensor(Entity):
             data['last_update'] = dt_util.as_local(
                 dt_util.utc_from_timestamp(self._api.data['time'] / 1000))
 
-        if self._var_id == 'current_warning_level':
-            prefix = 'current'
-        elif self._var_id == 'advance_warning_level':
+        if self._var_id == 'advance_warning_level':
             prefix = 'advance'
+        elif self._var_id == 'current_warning_level':
+            prefix = 'current'
         else:
             raise Exception('Unknown warning type')
 
         data['warning_count'] = self._api.data[prefix + '_warning_count']
         i = 0
         for event in self._api.data[prefix + '_warnings']:
-            i = i + 1
+            i += 1
 
             data['warning_{}_name'.format(i)] = event['event']
             data['warning_{}_level'.format(i)] = event['level']

@@ -100,9 +100,7 @@ async def daikin_api_setup(hass, host):
         _LOGGER.error("Unexpected error creating device %s", host)
         return None
 
-    api = DaikinApi(device)
-
-    return api
+    return DaikinApi(device)
 
 
 class DaikinApi:

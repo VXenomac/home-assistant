@@ -14,11 +14,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         ["Danfoss Air Away Mode Active", ReadCommand.away_mode, None],
     ]
 
-    dev = []
-
-    for sensor in sensors:
-        dev.append(DanfossAirBinarySensor(
-            data, sensor[0], sensor[1], sensor[2]))
+    dev = [DanfossAirBinarySensor(
+            data, sensor[0], sensor[1], sensor[2]) for sensor in sensors]
 
     add_entities(dev, True)
 

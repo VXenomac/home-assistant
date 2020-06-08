@@ -33,9 +33,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         for sensor in sensors:
 
-            if sensor.type in DECONZ_SENSOR and \
-               not (not gateway.allow_clip_sensor and
-                    sensor.type.startswith('CLIP')):
+            if sensor.type in DECONZ_SENSOR and (
+                gateway.allow_clip_sensor or not sensor.type.startswith('CLIP')
+            ):
 
                 if sensor.type in DECONZ_REMOTE:
                     if sensor.battery:
@@ -146,7 +146,6 @@ class DeconzBattery(DeconzDevice):
     @property
     def device_state_attributes(self):
         """Return the state attributes of the battery."""
-        attr = {
+        return {
             ATTR_EVENT_ID: slugify(self._device.name),
         }
-        return attr

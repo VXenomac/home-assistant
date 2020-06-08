@@ -65,12 +65,11 @@ class DukeEnergyMeter(Entity):
     @property
     def device_state_attributes(self):
         """Return the state attributes."""
-        attributes = {
+        return {
             LAST_BILL_USAGE: self.duke_meter.get_total(),
             LAST_BILL_AVERAGE_USAGE: self.duke_meter.get_average(),
             LAST_BILL_DAYS_BILLED: self.duke_meter.get_days_billed()
         }
-        return attributes
 
     def update(self):
         """Update meter."""

@@ -173,7 +173,7 @@ def adb_decorator(override_available=False):
         @functools.wraps(func)
         def _adb_exception_catcher(self, *args, **kwargs):
             # If the device is unavailable, don't do anything
-            if not self.available and not override_available:
+            if not (self.available or override_available):
                 return None
 
             try:

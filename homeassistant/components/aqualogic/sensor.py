@@ -43,11 +43,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):
     """Set up the sensor platform."""
-    sensors = []
-
     processor = hass.data[DOMAIN]
-    for sensor_type in config.get(CONF_MONITORED_CONDITIONS):
-        sensors.append(AquaLogicSensor(processor, sensor_type))
+    sensors = [
+        AquaLogicSensor(processor, sensor_type)
+        for sensor_type in config.get(CONF_MONITORED_CONDITIONS)
+    ]
+
 
     async_add_entities(sensors)
 

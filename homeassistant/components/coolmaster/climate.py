@@ -91,10 +91,7 @@ class CoolmasterClimate(ClimateDevice):
         device_mode = status['mode']
         self._current_operation = CM_TO_HA_STATE[device_mode]
 
-        if status['unit'] == 'celsius':
-            self._unit = TEMP_CELSIUS
-        else:
-            self._unit = TEMP_FAHRENHEIT
+        self._unit = TEMP_CELSIUS if status['unit'] == 'celsius' else TEMP_FAHRENHEIT
 
     @property
     def unique_id(self):

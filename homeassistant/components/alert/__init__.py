@@ -185,7 +185,7 @@ class Alert(ToggleEntity):
     @property
     def hidden(self):
         """Hide the alert when it is not firing."""
-        return not self._can_ack or not self._firing
+        return not (self._can_ack and self._firing)
 
     async def watched_entity_change(self, entity, from_state, to_state):
         """Determine if the alert should start or stop."""

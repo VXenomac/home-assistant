@@ -27,15 +27,15 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     def async_add_sensor(sensors):
         """Add binary sensor from deCONZ."""
         from pydeconz.sensor import DECONZ_BINARY_SENSOR
-        entities = []
+        entities = [
+            DeconzBinarySensor(sensor, gateway)
+            for sensor in sensors
+            if sensor.type in DECONZ_BINARY_SENSOR
+            and not (
+                not gateway.allow_clip_sensor and sensor.type.startswith('CLIP')
+            )
+        ]
 
-        for sensor in sensors:
-
-            if sensor.type in DECONZ_BINARY_SENSOR and \
-               not (not gateway.allow_clip_sensor and
-                    sensor.type.startswith('CLIP')):
-
-                entities.append(DeconzBinarySensor(sensor, gateway))
 
         async_add_entities(entities, True)
 

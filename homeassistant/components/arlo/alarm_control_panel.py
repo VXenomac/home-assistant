@@ -85,10 +85,7 @@ class ArloBaseStation(AlarmControlPanel):
         """Update the state of the device."""
         _LOGGER.debug("Updating Arlo Alarm Control Panel %s", self.name)
         mode = self._base_station.mode
-        if mode:
-            self._state = self._get_state_from_mode(mode)
-        else:
-            self._state = None
+        self._state = self._get_state_from_mode(mode) if mode else None
 
     async def async_alarm_disarm(self, code=None):
         """Send disarm command."""

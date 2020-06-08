@@ -254,10 +254,9 @@ class SensorFilter(Entity):
     @property
     def device_state_attributes(self):
         """Return the state attributes of the sensor."""
-        state_attr = {
+        return {
             ATTR_ENTITY_ID: self._entity
         }
-        return state_attr
 
 
 class FilterState:

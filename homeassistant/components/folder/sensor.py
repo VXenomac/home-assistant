@@ -27,8 +27,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 def get_files_list(folder_path, filter_term):
     """Return the list of files, applying filter."""
     query = folder_path + filter_term
-    files_list = glob.glob(query)
-    return files_list
+    return glob.glob(query)
 
 
 def get_size(files_list):
@@ -78,8 +77,7 @@ class Folder(Entity):
     def state(self):
         """Return the state of the sensor."""
         decimals = 2
-        size_mb = round(self._size/1e6, decimals)
-        return size_mb
+        return round(self._size/1e6, decimals)
 
     @property
     def icon(self):
@@ -89,13 +87,12 @@ class Folder(Entity):
     @property
     def device_state_attributes(self):
         """Return other details about the sensor state."""
-        attr = {
+        return {
             'path': self._folder_path,
             'filter': self._filter_term,
             'number_of_files': self._number_of_files,
             'bytes': self._size,
             }
-        return attr
 
     @property
     def unit_of_measurement(self):

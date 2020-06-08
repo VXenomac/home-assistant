@@ -139,16 +139,6 @@ class ElkArea(ElkEntity, alarm.AlarmControlPanel):
     def _element_changed(self, element, changeset):
         from elkm1_lib.const import ArmedStatus
 
-        elk_state_to_hass_state = {
-            ArmedStatus.DISARMED.value: STATE_ALARM_DISARMED,
-            ArmedStatus.ARMED_AWAY.value: STATE_ALARM_ARMED_AWAY,
-            ArmedStatus.ARMED_STAY.value: STATE_ALARM_ARMED_HOME,
-            ArmedStatus.ARMED_STAY_INSTANT.value: STATE_ALARM_ARMED_HOME,
-            ArmedStatus.ARMED_TO_NIGHT.value: STATE_ALARM_ARMED_NIGHT,
-            ArmedStatus.ARMED_TO_NIGHT_INSTANT.value: STATE_ALARM_ARMED_NIGHT,
-            ArmedStatus.ARMED_TO_VACATION.value: STATE_ALARM_ARMED_AWAY,
-        }
-
         if self._element.alarm_state is None:
             self._state = None
         elif self._area_is_in_alarm_state():
@@ -157,6 +147,16 @@ class ElkArea(ElkEntity, alarm.AlarmControlPanel):
             self._state = STATE_ALARM_ARMING \
                 if self._element.is_exit else STATE_ALARM_PENDING
         else:
+            elk_state_to_hass_state = {
+                ArmedStatus.DISARMED.value: STATE_ALARM_DISARMED,
+                ArmedStatus.ARMED_AWAY.value: STATE_ALARM_ARMED_AWAY,
+                ArmedStatus.ARMED_STAY.value: STATE_ALARM_ARMED_HOME,
+                ArmedStatus.ARMED_STAY_INSTANT.value: STATE_ALARM_ARMED_HOME,
+                ArmedStatus.ARMED_TO_NIGHT.value: STATE_ALARM_ARMED_NIGHT,
+                ArmedStatus.ARMED_TO_NIGHT_INSTANT.value: STATE_ALARM_ARMED_NIGHT,
+                ArmedStatus.ARMED_TO_VACATION.value: STATE_ALARM_ARMED_AWAY,
+            }
+
             self._state = elk_state_to_hass_state[self._element.armed_status]
 
     def _entry_exit_timer_is_running(self):

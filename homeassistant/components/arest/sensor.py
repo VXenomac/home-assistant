@@ -139,9 +139,8 @@ class ArestSensor(Entity):
         if 'error' in values:
             return values['error']
 
-        value = self._renderer(
+        return self._renderer(
             values.get('value', values.get(self._variable, None)))
-        return value
 
     def update(self):
         """Get the latest data from aREST API."""

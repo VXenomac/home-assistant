@@ -116,22 +116,25 @@ async def async_setup(hass, config):
 
     async def trigger_service_handler(service_call):
         """Handle automation triggers."""
-        tasks = []
-        for entity in await component.async_extract_from_service(service_call):
-            tasks.append(entity.async_trigger(
+        tasks = [
+            entity.async_trigger(
                 service_call.data.get(ATTR_VARIABLES),
                 skip_condition=True,
-                context=service_call.context))
+                context=service_call.context,
+            )
+            for entity in await component.async_extract_from_service(service_call)
+        ]
 
         if tasks:
             await asyncio.wait(tasks, loop=hass.loop)
 
     async def turn_onoff_service_handler(service_call):
         """Handle automation turn on/off service calls."""
-        tasks = []
         method = 'async_{}'.format(service_call.service)
-        for entity in await component.async_extract_from_service(service_call):
-            tasks.append(getattr(entity, method)())
+        tasks = [
+            getattr(entity, method)()
+            for entity in await component.async_extract_from_service(service_call)
+        ]
 
         if tasks:
             await asyncio.wait(tasks, loop=hass.loop)
@@ -277,7 +280,7 @@ class AutomationEntity(ToggleEntity, RestoreEntity):
 
         This method is a coroutine.
         """
-        if not skip_condition and not self._cond_func(variables):
+        if not (skip_condition or self._cond_func(variables)):
             return
 
         # Create a new context referring to the old context.

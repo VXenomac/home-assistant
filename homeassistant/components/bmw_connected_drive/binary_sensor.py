@@ -99,40 +99,42 @@ class BMWConnectedDriveSensor(BinarySensorDevice):
             'car': self._vehicle.name
         }
 
-        if self._attribute == 'lids':
-            for lid in vehicle_state.lids:
-                result[lid.name] = lid.state.value
-        elif self._attribute == 'windows':
-            for window in vehicle_state.windows:
-                result[window.name] = window.state.value
-        elif self._attribute == 'door_lock_state':
-            result['door_lock_state'] = vehicle_state.door_lock_state.value
-            result['last_update_reason'] = vehicle_state.last_update_reason
-        elif self._attribute == 'lights_parking':
-            result['lights_parking'] = vehicle_state.parking_lights.value
-        elif self._attribute == 'condition_based_services':
-            for report in vehicle_state.condition_based_services:
-                result.update(
-                    self._format_cbs_report(report))
+        if self._attribute == 'charging_status':
+            result['charging_status'] = vehicle_state.charging_status.value
+            # pylint: disable=protected-access
+            result['last_charging_end_result'] = \
+                vehicle_state._attributes['lastChargingEndResult']
         elif self._attribute == 'check_control_messages':
             check_control_messages = vehicle_state.check_control_messages
             if not check_control_messages:
                 result['check_control_messages'] = 'OK'
             else:
-                cbs_list = []
-                for message in check_control_messages:
-                    cbs_list.append(message['ccmDescriptionShort'])
+                cbs_list = [
+                    message['ccmDescriptionShort']
+                    for message in check_control_messages
+                ]
+
                 result['check_control_messages'] = cbs_list
-        elif self._attribute == 'charging_status':
-            result['charging_status'] = vehicle_state.charging_status.value
-            # pylint: disable=protected-access
-            result['last_charging_end_result'] = \
-                vehicle_state._attributes['lastChargingEndResult']
-        if self._attribute == 'connection_status':
+        elif self._attribute == 'condition_based_services':
+            for report in vehicle_state.condition_based_services:
+                result.update(
+                    self._format_cbs_report(report))
+        elif self._attribute == 'connection_status':
             # pylint: disable=protected-access
             result['connection_status'] = \
                 vehicle_state._attributes['connectionStatus']
 
+        elif self._attribute == 'door_lock_state':
+            result['door_lock_state'] = vehicle_state.door_lock_state.value
+            result['last_update_reason'] = vehicle_state.last_update_reason
+        elif self._attribute == 'lids':
+            for lid in vehicle_state.lids:
+                result[lid.name] = lid.state.value
+        elif self._attribute == 'lights_parking':
+            result['lights_parking'] = vehicle_state.parking_lights.value
+        elif self._attribute == 'windows':
+            for window in vehicle_state.windows:
+                result[window.name] = window.state.value
         return sorted(result.items())
 
     def update(self):

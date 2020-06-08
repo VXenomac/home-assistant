@@ -400,11 +400,7 @@ def _account_data(cloud):
     remote = cloud.remote
 
     # Load remote certificate
-    if remote.certificate:
-        certificate = attr.asdict(remote.certificate)
-    else:
-        certificate = None
-
+    certificate = attr.asdict(remote.certificate) if remote.certificate else None
     return {
         'logged_in': True,
         'email': claims['email'],

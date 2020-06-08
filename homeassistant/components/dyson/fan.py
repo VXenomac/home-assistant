@@ -298,7 +298,7 @@ class DysonPureCoolLinkDevice(FanEntity):
         """Get the list of available speeds."""
         from libpurecool.const import FanSpeed
 
-        supported_speeds = [
+        return [
             FanSpeed.FAN_SPEED_AUTO.value,
             int(FanSpeed.FAN_SPEED_1.value),
             int(FanSpeed.FAN_SPEED_2.value),
@@ -311,8 +311,6 @@ class DysonPureCoolLinkDevice(FanEntity):
             int(FanSpeed.FAN_SPEED_9.value),
             int(FanSpeed.FAN_SPEED_10.value),
         ]
-
-        return supported_speeds
 
     @property
     def supported_features(self) -> int:

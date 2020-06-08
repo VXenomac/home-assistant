@@ -135,51 +135,25 @@ class GlancesSensor(Entity):
         value = self.glances.api.data
 
         if value is not None:
-            if self.type == 'disk_use_percent':
-                self._state = value['fs'][0]['percent']
-            elif self.type == 'disk_use':
-                self._state = round(value['fs'][0]['used'] / 1024**3, 1)
-            elif self.type == 'disk_free':
-                try:
-                    self._state = round(value['fs'][0]['free'] / 1024**3, 1)
-                except KeyError:
-                    self._state = round((value['fs'][0]['size'] -
-                                         value['fs'][0]['used']) / 1024**3, 1)
-            elif self.type == 'memory_use_percent':
-                self._state = value['mem']['percent']
-            elif self.type == 'memory_use':
-                self._state = round(value['mem']['used'] / 1024**2, 1)
-            elif self.type == 'memory_free':
-                self._state = round(value['mem']['free'] / 1024**2, 1)
-            elif self.type == 'swap_use_percent':
-                self._state = value['memswap']['percent']
-            elif self.type == 'swap_use':
-                self._state = round(value['memswap']['used'] / 1024**3, 1)
-            elif self.type == 'swap_free':
-                self._state = round(value['memswap']['free'] / 1024**3, 1)
-            elif self.type == 'processor_load':
-                # Windows systems don't provide load details
-                try:
-                    self._state = value['load']['min15']
-                except KeyError:
-                    self._state = value['cpu']['total']
-            elif self.type == 'process_running':
-                self._state = value['processcount']['running']
-            elif self.type == 'process_total':
-                self._state = value['processcount']['total']
-            elif self.type == 'process_thread':
-                self._state = value['processcount']['thread']
-            elif self.type == 'process_sleeping':
-                self._state = value['processcount']['sleeping']
-            elif self.type == 'cpu_use_percent':
-                self._state = value['quicklook']['cpu']
-            elif self.type == 'cpu_temp':
+            if self.type == 'cpu_temp':
                 for sensor in value['sensors']:
                     if sensor['label'] in ['CPU', "CPU Temperature",
                                            "Package id 0", "Physical id 0",
                                            "cpu_thermal 1", "cpu-thermal 1",
                                            "exynos-therm 1", "soc_thermal 1"]:
                         self._state = sensor['value']
+            elif self.type == 'cpu_use_percent':
+                self._state = value['quicklook']['cpu']
+            elif self.type == 'disk_free':
+                try:
+                    self._state = round(value['fs'][0]['free'] / 1024**3, 1)
+                except KeyError:
+                    self._state = round((value['fs'][0]['size'] -
+                                         value['fs'][0]['used']) / 1024**3, 1)
+            elif self.type == 'disk_use':
+                self._state = round(value['fs'][0]['used'] / 1024**3, 1)
+            elif self.type == 'disk_use_percent':
+                self._state = value['fs'][0]['percent']
             elif self.type == 'docker_active':
                 count = 0
                 try:
@@ -210,6 +184,33 @@ class GlancesSensor(Entity):
                         self._state = round(mem_use / 1024**2, 1)
                 except KeyError:
                     self._state = STATE_UNAVAILABLE
+
+            elif self.type == 'memory_free':
+                self._state = round(value['mem']['free'] / 1024**2, 1)
+            elif self.type == 'memory_use':
+                self._state = round(value['mem']['used'] / 1024**2, 1)
+            elif self.type == 'memory_use_percent':
+                self._state = value['mem']['percent']
+            elif self.type == 'process_running':
+                self._state = value['processcount']['running']
+            elif self.type == 'process_sleeping':
+                self._state = value['processcount']['sleeping']
+            elif self.type == 'process_thread':
+                self._state = value['processcount']['thread']
+            elif self.type == 'process_total':
+                self._state = value['processcount']['total']
+            elif self.type == 'processor_load':
+                # Windows systems don't provide load details
+                try:
+                    self._state = value['load']['min15']
+                except KeyError:
+                    self._state = value['cpu']['total']
+            elif self.type == 'swap_free':
+                self._state = round(value['memswap']['free'] / 1024**3, 1)
+            elif self.type == 'swap_use':
+                self._state = round(value['memswap']['used'] / 1024**3, 1)
+            elif self.type == 'swap_use_percent':
+                self._state = value['memswap']['percent']
 
 
 class GlancesData:

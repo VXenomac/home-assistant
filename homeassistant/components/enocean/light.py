@@ -80,17 +80,13 @@ class EnOceanLight(enocean.EnOceanDevice, Light):
         bval = math.floor(self._brightness / 256.0 * 100.0)
         if bval == 0:
             bval = 1
-        command = [0xa5, 0x02, bval, 0x01, 0x09]
-        command.extend(self._sender_id)
-        command.extend([0x00])
+        command = [0xa5, 0x02, bval, 0x01, 0x09, *self._sender_id, 0x00]
         self.send_command(command, [], 0x01)
         self._on_state = True
 
     def turn_off(self, **kwargs):
         """Turn the light source off."""
-        command = [0xa5, 0x02, 0x00, 0x01, 0x09]
-        command.extend(self._sender_id)
-        command.extend([0x00])
+        command = [0xa5, 0x02, 0x00, 0x01, 0x09, *self._sender_id, 0x00]
         self.send_command(command, [], 0x01)
         self._on_state = False
 

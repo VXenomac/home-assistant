@@ -412,10 +412,8 @@ class FibaroDevice(Entity):
         """Return the current binary state."""
         if self.fibaro_device.properties.value == 'false':
             return False
-        if self.fibaro_device.properties.value == 'true' or \
-                int(self.fibaro_device.properties.value) > 0:
-            return True
-        return False
+        return self.fibaro_device.properties.value == 'true' or \
+                int(self.fibaro_device.properties.value) > 0
 
     @property
     def unique_id(self) -> str:

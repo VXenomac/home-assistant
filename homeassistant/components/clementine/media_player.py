@@ -71,13 +71,10 @@ class ClementineDevice(MediaPlayerDevice):
 
             if client.state == 'Playing':
                 self._state = STATE_PLAYING
-            elif client.state == 'Paused':
+            elif client.state == 'Paused' or client.state != 'Disconnected':
                 self._state = STATE_PAUSED
-            elif client.state == 'Disconnected':
-                self._state = STATE_OFF
             else:
-                self._state = STATE_PAUSED
-
+                self._state = STATE_OFF
             if client.last_update and (time.time() - client.last_update > 40):
                 self._state = STATE_OFF
 
@@ -120,8 +117,7 @@ class ClementineDevice(MediaPlayerDevice):
     @property
     def source_list(self):
         """List of available input sources."""
-        source_names = [s["name"] for s in self._client.playlists.values()]
-        return source_names
+        return [s["name"] for s in self._client.playlists.values()]
 
     def select_source(self, source):
         """Select input source."""

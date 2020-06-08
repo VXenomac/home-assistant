@@ -306,7 +306,7 @@ class BluesoundPlayer(MediaPlayerDevice):
         """Send command to the player."""
         import xmltodict
 
-        if not self._is_online and not allow_offline:
+        if not (self._is_online or allow_offline):
             return
 
         if method[0] == '/':
@@ -323,10 +323,7 @@ class BluesoundPlayer(MediaPlayerDevice):
 
             if response.status == 200:
                 result = await response.text()
-                if result:
-                    data = xmltodict.parse(result)
-                else:
-                    data = None
+                data = xmltodict.parse(result) if result else None
             elif response.status == 595:
                 _LOGGER.info("Status 595 returned, treating as timeout")
                 raise BluesoundPlayer._TimeoutException()
@@ -653,9 +650,7 @@ class BluesoundPlayer(MediaPlayerDevice):
         for source in self._preset_items:
             sources.append(source['title'])
 
-        for source in [x for x in self._services_items
-                       if x['type'] == 'LocalMusic' or
-                       x['type'] == 'RadioService']:
+        for source in [x for x in self._services_items if x['type'] in ['LocalMusic', 'RadioService']]:
             sources.append(source['title'])
 
         for source in self._capture_items:

@@ -44,8 +44,7 @@ async def async_from_config_dict(config: Dict[str, Any],
                                  skip_pip: bool = False,
                                  log_rotate_days: Any = None,
                                  log_file: Any = None,
-                                 log_no_color: bool = False) \
-                           -> Optional[core.HomeAssistant]:
+                                 log_no_color: bool = False) -> Optional[core.HomeAssistant]:
     """Try to configure Home Assistant from a configuration dictionary.
 
     Dynamically loads required components and its dependencies.
@@ -124,13 +123,10 @@ async def async_from_config_dict(config: Dict[str, Any],
     # TEMP: warn users of invalid extra keys
     # Remove after 0.92
     if cv.INVALID_EXTRA_KEYS_FOUND:
-        msg = []
-        msg.append(
-            "Your configuration contains extra keys "
+        msg = ["Your configuration contains extra keys "
             "that the platform does not support (but were silently "
             "accepted before 0.88). Please find and remove the following."
-            "This will become a breaking change."
-        )
+            "This will become a breaking change."]
         msg.append('\n'.join('- {}'.format(it)
                              for it in cv.INVALID_EXTRA_KEYS_FOUND))
 
@@ -288,8 +284,7 @@ async def async_mount_local_lib_path(config_dir: str) -> str:
 def _get_domains(hass: core.HomeAssistant, config: Dict[str, Any]) -> Set[str]:
     """Get domains of components to set up."""
     # Filter out the repeating and common config section [homeassistant]
-    domains = set(key.split(' ')[0] for key in config.keys()
-                  if key != core.DOMAIN)
+    domains = {key.split(' ')[0] for key in config if key != core.DOMAIN}
 
     # Add config entry domains
     domains.update(hass.config_entries.async_domains())  # type: ignore

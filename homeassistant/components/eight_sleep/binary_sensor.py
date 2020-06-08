@@ -18,10 +18,7 @@ async def async_setup_platform(hass, config, async_add_entities,
     sensors = discovery_info[CONF_BINARY_SENSORS]
     eight = hass.data[DATA_EIGHT]
 
-    all_sensors = []
-
-    for sensor in sensors:
-        all_sensors.append(EightHeatSensor(name, eight, sensor))
+    all_sensors = [EightHeatSensor(name, eight, sensor) for sensor in sensors]
 
     async_add_entities(all_sensors, True)
 

@@ -165,15 +165,13 @@ class EQ3BTSmartThermostat(ClimateDevice):
     @property
     def device_state_attributes(self):
         """Return the device specific state attributes."""
-        dev_specific = {
+        return {
             ATTR_STATE_AWAY_END: self._thermostat.away_end,
             ATTR_STATE_LOCKED: self._thermostat.locked,
             ATTR_STATE_LOW_BAT: self._thermostat.low_battery,
             ATTR_STATE_VALVE: self._thermostat.valve_state,
             ATTR_STATE_WINDOW_OPEN: self._thermostat.window_open,
         }
-
-        return dev_specific
 
     def update(self):
         """Update the data from the thermostat."""

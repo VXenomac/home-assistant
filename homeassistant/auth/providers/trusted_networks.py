@@ -89,11 +89,14 @@ class TrustedNetworksAuthProvider(AuthProvider):
                 flattened_group_list = [group for sublist in group_list
                                         for group in sublist]
                 available_users = [
-                    user for user in available_users
-                    if (user.id in user_list or
-                        any([group.id in flattened_group_list
-                             for group in user.groups]))
+                    user
+                    for user in available_users
+                    if user.id in user_list
+                    or any(
+                        group.id in flattened_group_list for group in user.groups
+                    )
                 ]
+
                 break
 
         return TrustedNetworksLoginFlow(
@@ -143,8 +146,10 @@ class TrustedNetworksAuthProvider(AuthProvider):
         if not self.trusted_networks:
             raise InvalidAuthError('trusted_networks is not configured')
 
-        if not any(ip_addr in trusted_network for trusted_network
-                   in self.trusted_networks):
+        if all(
+            ip_addr not in trusted_network
+            for trusted_network in self.trusted_networks
+        ):
             raise InvalidAuthError('Not in trusted_networks')
 
 

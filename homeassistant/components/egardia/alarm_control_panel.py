@@ -73,9 +73,7 @@ class EgardiaAlarm(alarm.AlarmControlPanel):
     @property
     def should_poll(self):
         """Poll if no report server is enabled."""
-        if not self._rs_enabled:
-            return True
-        return False
+        return not self._rs_enabled
 
     def handle_status_event(self, event):
         """Handle the Egardia system status event."""
@@ -87,11 +85,10 @@ class EgardiaAlarm(alarm.AlarmControlPanel):
 
     def lookupstatusfromcode(self, statuscode):
         """Look at the rs_codes and returns the status from the code."""
-        status = next((
+        return next((
             status_group.upper() for status_group, codes
             in self._rs_codes.items() for code in codes
             if statuscode == code), 'UNKNOWN')
-        return status
 
     def parsestatus(self, status):
         """Parse the status."""

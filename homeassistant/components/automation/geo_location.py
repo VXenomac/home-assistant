@@ -42,8 +42,7 @@ async def async_trigger(hass, config, action, automation_info):
         # Skip if the event's source does not match the trigger's source.
         from_state = event.data.get('old_state')
         to_state = event.data.get('new_state')
-        if not source_match(from_state, source) \
-           and not source_match(to_state, source):
+        if not (source_match(from_state, source) or source_match(to_state, source)):
             return
 
         zone_state = hass.states.get(zone_entity_id)

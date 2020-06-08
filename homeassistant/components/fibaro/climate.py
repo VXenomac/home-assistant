@@ -134,11 +134,7 @@ class FibaroThermostat(FibaroDevice, ClimateDevice):
                 self._fan_mode_device = FibaroDevice(device)
                 self._support_flags |= SUPPORT_FAN_MODE
 
-        if tempunit == 'F':
-            self._unit_of_temp = TEMP_FAHRENHEIT
-        else:
-            self._unit_of_temp = TEMP_CELSIUS
-
+        self._unit_of_temp = TEMP_FAHRENHEIT if tempunit == 'F' else TEMP_CELSIUS
         if self._fan_mode_device:
             fan_modes = self._fan_mode_device.fibaro_device.\
                 properties.supportedModes.split(",")
@@ -284,6 +280,4 @@ class FibaroThermostat(FibaroDevice, ClimateDevice):
     @property
     def is_on(self):
         """Return true if on."""
-        if self.current_operation == STATE_OFF:
-            return False
-        return True
+        return self.current_operation != STATE_OFF

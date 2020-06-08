@@ -126,9 +126,9 @@ class DelugeSensor(Entity):
         if self.data:
             if self.type == 'download_speed':
                 kb_spd = float(download)
-                kb_spd = kb_spd / 1024
+                kb_spd /= 1024
                 self._state = round(kb_spd, 2 if kb_spd < 0.1 else 1)
             elif self.type == 'upload_speed':
                 kb_spd = float(upload)
-                kb_spd = kb_spd / 1024
+                kb_spd /= 1024
                 self._state = round(kb_spd, 2 if kb_spd < 0.1 else 1)

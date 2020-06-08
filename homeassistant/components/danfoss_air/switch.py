@@ -21,11 +21,11 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
          UpdateCommand.boost_deactivate],
     ]
 
-    dev = []
+    dev = [
+        DanfossAir(data, switch[0], switch[1], switch[2], switch[3])
+        for switch in switches
+    ]
 
-    for switch in switches:
-        dev.append(DanfossAir(
-            data, switch[0], switch[1], switch[2], switch[3]))
 
     add_entities(dev)
 

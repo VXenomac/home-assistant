@@ -676,7 +676,7 @@ class State:
         """Initialize a new state."""
         state = str(state)
 
-        if not valid_entity_id(entity_id) and not temp_invalid_id_bypass:
+        if not (valid_entity_id(entity_id) or temp_invalid_id_bypass):
             raise InvalidEntityFormatError((
                 "Invalid entity id encountered: {}. "
                 "Format should be <domain>.<object_id>").format(entity_id))
@@ -1213,10 +1213,7 @@ class Config:
         thepath = pathlib.Path(path)
         try:
             # The file path does not have to exist (it's parent should)
-            if thepath.exists():
-                thepath = thepath.resolve()
-            else:
-                thepath = thepath.parent.resolve()
+            thepath = thepath.resolve() if thepath.exists() else thepath.parent.resolve()
         except (FileNotFoundError, RuntimeError, PermissionError):
             return False
 

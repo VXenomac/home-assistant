@@ -89,23 +89,38 @@ class EnOceanDongle:
                 rxtype = "dimmerstatus"
                 value = temp.data[2]
             for device in self.__devices:
-                if rxtype == "wallswitch" and device.stype == "listener":
-                    if temp.sender_int == self._combine_hex(device.dev_id):
-                        device.value_changed(value, temp.data[1])
-                if rxtype == "power" and device.stype == "powersensor":
-                    if temp.sender_int == self._combine_hex(device.dev_id):
-                        device.value_changed(value)
-                if rxtype == "power" and device.stype == "switch":
-                    if temp.sender_int == self._combine_hex(device.dev_id):
-                        if value > 10:
-                            device.value_changed(1)
-                if rxtype == "switch_status" and device.stype == "switch" and \
-                        channel == device.channel:
-                    if temp.sender_int == self._combine_hex(device.dev_id):
-                        device.value_changed(value)
-                if rxtype == "dimmerstatus" and device.stype == "dimmer":
-                    if temp.sender_int == self._combine_hex(device.dev_id):
-                        device.value_changed(value)
+                if (
+                    rxtype == "wallswitch"
+                    and device.stype == "listener"
+                    and temp.sender_int == self._combine_hex(device.dev_id)
+                ):
+                    device.value_changed(value, temp.data[1])
+                if (
+                    rxtype == "power"
+                    and device.stype == "powersensor"
+                    and temp.sender_int == self._combine_hex(device.dev_id)
+                ):
+                    device.value_changed(value)
+                if (
+                    rxtype == "power"
+                    and device.stype == "switch"
+                    and temp.sender_int == self._combine_hex(device.dev_id)
+                    and value > 10
+                ):
+                    device.value_changed(1)
+                if (
+                    rxtype == "switch_status"
+                    and device.stype == "switch"
+                    and channel == device.channel
+                    and temp.sender_int == self._combine_hex(device.dev_id)
+                ):
+                    device.value_changed(value)
+                if (
+                    rxtype == "dimmerstatus"
+                    and device.stype == "dimmer"
+                    and temp.sender_int == self._combine_hex(device.dev_id)
+                ):
+                    device.value_changed(value)
 
 
 class EnOceanDevice():

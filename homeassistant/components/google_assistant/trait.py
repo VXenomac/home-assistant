@@ -269,13 +269,8 @@ class OnOffTrait(_Trait):
         """Execute an OnOff command."""
         domain = self.state.domain
 
-        if domain == group.DOMAIN:
-            service_domain = HA_DOMAIN
-            service = SERVICE_TURN_ON if params['on'] else SERVICE_TURN_OFF
-
-        else:
-            service_domain = domain
-            service = SERVICE_TURN_ON if params['on'] else SERVICE_TURN_OFF
+        service_domain = HA_DOMAIN if domain == group.DOMAIN else domain
+        service = SERVICE_TURN_ON if params['on'] else SERVICE_TURN_OFF
 
         await self.hass.services.async_call(service_domain, service, {
             ATTR_ENTITY_ID: self.state.entity_id
@@ -505,28 +500,27 @@ class StartStopTrait(_Trait):
 
     async def execute(self, command, data, params, challenge):
         """Execute a StartStop command."""
-        if command == COMMAND_STARTSTOP:
-            if params['start']:
-                await self.hass.services.async_call(
-                    self.state.domain, vacuum.SERVICE_START, {
-                        ATTR_ENTITY_ID: self.state.entity_id
-                    }, blocking=True, context=data.context)
-            else:
-                await self.hass.services.async_call(
-                    self.state.domain, vacuum.SERVICE_STOP, {
-                        ATTR_ENTITY_ID: self.state.entity_id
-                    }, blocking=True, context=data.context)
+        if (
+            command == COMMAND_STARTSTOP
+            and params['start']
+            or command != COMMAND_STARTSTOP
+            and command == COMMAND_PAUSEUNPAUSE
+            and not params['pause']
+        ):
+            await self.hass.services.async_call(
+                self.state.domain, vacuum.SERVICE_START, {
+                    ATTR_ENTITY_ID: self.state.entity_id
+                }, blocking=True, context=data.context)
+        elif command == COMMAND_STARTSTOP:
+            await self.hass.services.async_call(
+                self.state.domain, vacuum.SERVICE_STOP, {
+                    ATTR_ENTITY_ID: self.state.entity_id
+                }, blocking=True, context=data.context)
         elif command == COMMAND_PAUSEUNPAUSE:
-            if params['pause']:
-                await self.hass.services.async_call(
-                    self.state.domain, vacuum.SERVICE_PAUSE, {
-                        ATTR_ENTITY_ID: self.state.entity_id
-                    }, blocking=True, context=data.context)
-            else:
-                await self.hass.services.async_call(
-                    self.state.domain, vacuum.SERVICE_START, {
-                        ATTR_ENTITY_ID: self.state.entity_id
-                    }, blocking=True, context=data.context)
+            await self.hass.services.async_call(
+                self.state.domain, vacuum.SERVICE_PAUSE, {
+                    ATTR_ENTITY_ID: self.state.entity_id
+                }, blocking=True, context=data.context)
 
 
 @register_trait
@@ -757,11 +751,7 @@ class LockUnlockTrait(_Trait):
         """Execute an LockUnlock command."""
         _verify_pin_challenge(data, challenge)
 
-        if params['lock']:
-            service = lock.SERVICE_LOCK
-        else:
-            service = lock.SERVICE_UNLOCK
-
+        service = lock.SERVICE_LOCK if params['lock'] else lock.SERVICE_UNLOCK
         await self.hass.services.async_call(lock.DOMAIN, service, {
             ATTR_ENTITY_ID: self.state.entity_id
         }, blocking=True, context=data.context)
@@ -986,9 +976,7 @@ class ModesTrait(_Trait):
                 )
         if sources:
             modes.append(sources)
-        payload = {'availableModes': modes}
-
-        return payload
+        return {'availableModes': modes}
 
     def query_attributes(self):
         """Return current modes."""
@@ -1092,11 +1080,7 @@ class OpenCloseTrait(_Trait):
                 response['openPercent'] = 0
 
         elif domain == binary_sensor.DOMAIN:
-            if self.state.state == STATE_ON:
-                response['openPercent'] = 100
-            else:
-                response['openPercent'] = 0
-
+            response['openPercent'] = 100 if self.state.state == STATE_ON else 0
         return response
 
     async def execute(self, command, data, params, challenge):
@@ -1149,5 +1133,5 @@ def _verify_pin_challenge(data, challenge):
 
 def _verify_ack_challenge(data, challenge):
     """Verify a pin challenge."""
-    if not challenge or not challenge.get('ack'):
+    if not (challenge and challenge.get('ack')):
         raise ChallengeNeeded(CHALLENGE_ACK_NEEDED)

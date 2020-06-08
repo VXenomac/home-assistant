@@ -318,8 +318,7 @@ async def async_hass_config_yaml(hass: HomeAssistant) -> Dict:
         if path is None:
             raise HomeAssistantError(
                 "Config file not found in: {}".format(hass.config.config_dir))
-        config = load_yaml_config_file(path)
-        return config
+        return load_yaml_config_file(path)
 
     config = await hass.async_add_executor_job(_load_hass_yaml_config)
     core_config = config.get(CONF_CORE, {})
@@ -844,11 +843,7 @@ def async_notify_setup_error(
     message = 'The following components and platforms could not be set up:\n\n'
 
     for name, link in errors.items():
-        if link:
-            part = HA_COMPONENT_URL.format(name.replace('_', '-'), name)
-        else:
-            part = name
-
+        part = HA_COMPONENT_URL.format(name.replace('_', '-'), name) if link else name
         message += ' - {}\n'.format(part)
 
     message += '\nPlease check your config.'

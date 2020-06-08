@@ -46,10 +46,11 @@ async def async_setup_platform(hass, hass_config, async_add_entities,
     """Set up the Genius hub climate devices."""
     client = hass.data[DOMAIN]['client']
 
-    zones = []
-    for zone in client.hub.zone_objs:
-        if hasattr(zone, 'temperature'):
-            zones.append(GeniusClimate(client, zone))
+    zones = [
+        GeniusClimate(client, zone)
+        for zone in client.hub.zone_objs
+        if hasattr(zone, 'temperature')
+    ]
 
     async_add_entities(zones)
 

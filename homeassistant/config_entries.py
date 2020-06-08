@@ -626,7 +626,7 @@ class ConfigEntries:
         if options is not _UNDEF:
             entry.options = options
 
-        if data is not _UNDEF or options is not _UNDEF:
+        if not (data is _UNDEF and options is _UNDEF):
             for listener_ref in entry.update_listeners:
                 listener = listener_ref()
                 self.hass.async_create_task(listener(self.hass, entry))
@@ -668,9 +668,11 @@ class ConfigEntries:
     async def _async_finish_flow(self, flow, result):
         """Finish a config flow and add an entry."""
         # Remove notification if no other discovery config entries in progress
-        if not any(ent['context']['source'] in DISCOVERY_SOURCES for ent
-                   in self.hass.config_entries.flow.async_progress()
-                   if ent['flow_id'] != flow.flow_id):
+        if all(
+            ent['context']['source'] not in DISCOVERY_SOURCES
+            for ent in self.hass.config_entries.flow.async_progress()
+            if ent['flow_id'] != flow.flow_id
+        ):
             self.hass.components.persistent_notification.async_dismiss(
                 DISCOVERY_NOTIFICATION_ID)
 
@@ -791,9 +793,8 @@ class OptionsFlowManager:
         entry = self.hass.config_entries.async_get_entry(entry_id)
         if entry is None:
             return
-        flow = HANDLERS[entry.domain].async_get_options_flow(
+        return HANDLERS[entry.domain].async_get_options_flow(
             entry.data, entry.options)
-        return flow
 
     async def _async_finish_flow(self, flow, result):
         """Finish an options flow and update options for configuration entry.

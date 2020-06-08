@@ -472,8 +472,7 @@ class EvoController(EvoClimateDevice):
         temps = [zone['setpointStatus']['targetHeatTemperature']
                  for zone in self._status['zones']]
 
-        avg_temp = round(sum(temps) / len(temps), 1) if temps else None
-        return avg_temp
+        return round(sum(temps) / len(temps), 1) if temps else None
 
     @property
     def current_temperature(self):
@@ -486,8 +485,7 @@ class EvoController(EvoClimateDevice):
                     if x['temperatureStatus']['isAvailable'] is True]
         temps = [zone['temperatureStatus']['temperature'] for zone in tmp_list]
 
-        avg_temp = round(sum(temps) / len(temps), 1) if temps else None
-        return avg_temp
+        return round(sum(temps) / len(temps), 1) if temps else None
 
     @property
     def is_on(self) -> bool:

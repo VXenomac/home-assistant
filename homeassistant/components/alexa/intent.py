@@ -194,7 +194,7 @@ def resolve_slot_synonyms(key, request):
             _LOGGER.debug(
                 'Found multiple synonym resolutions for slot value: {%s: %s}',
                 key,
-                request['value']
+                resolved_value,
             )
 
     return resolved_value

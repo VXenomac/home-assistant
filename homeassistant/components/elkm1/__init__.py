@@ -41,8 +41,10 @@ def _host_validator(config):
     if config[CONF_HOST].startswith('elks://'):
         if CONF_USERNAME not in config or CONF_PASSWORD not in config:
             raise vol.Invalid("Specify username and password for elks://")
-    elif not config[CONF_HOST].startswith('elk://') and not config[
-            CONF_HOST].startswith('serial://'):
+    elif not (
+        config[CONF_HOST].startswith('elk://')
+        or config[CONF_HOST].startswith('serial://')
+    ):
         raise vol.Invalid("Invalid host URL")
     return config
 
@@ -206,9 +208,7 @@ class ElkEntity(Entity):
 
     def initial_attrs(self):
         """Return the underlying element's attributes as a dict."""
-        attrs = {}
-        attrs['index'] = self._element.index + 1
-        return attrs
+        return {'index': self._element.index + 1}
 
     def _element_changed(self, element, changeset):
         pass

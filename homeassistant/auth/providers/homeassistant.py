@@ -120,7 +120,6 @@ class Data:
         Raises InvalidAuth if auth invalid.
         """
         username = self.normalize_username(username)
-        dummy = b'$2b$12$CiuFGszHx9eNHxPuQcwBWez4CwDTOcLTX5CbOpV6gef2nYuXkY7BO'
         found = None
 
         # Compare all users to avoid timing attacks.
@@ -129,6 +128,7 @@ class Data:
                 found = user
 
         if found is None:
+            dummy = b'$2b$12$CiuFGszHx9eNHxPuQcwBWez4CwDTOcLTX5CbOpV6gef2nYuXkY7BO'
             # check a hash to make timing the same as if user was found
             bcrypt.checkpw(b'foo',
                            dummy)

@@ -109,11 +109,10 @@ class GearbestSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return the state attributes."""
-        attrs = {'name': self._item.name,
+        return {'name': self._item.name,
                  'description': self._item.description,
                  'currency': self._item.currency,
                  'url': self._item.url}
-        return attrs
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     def update(self):

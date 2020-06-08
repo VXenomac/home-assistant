@@ -160,8 +160,7 @@ class EcoNetWaterHeater(WaterHeaterDevice):
 
         ["eco", "heat_pump", "high_demand", "electric_only"]
         """
-        current_op = self.econet_state_to_ha.get(self.water_heater.mode)
-        return current_op
+        return self.econet_state_to_ha.get(self.water_heater.mode)
 
     @property
     def operation_list(self):

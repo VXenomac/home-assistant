@@ -471,9 +471,7 @@ def get_entity_state(config, entity):
         entity_features = entity.attributes.get(ATTR_SUPPORTED_FEATURES, 0)
 
         if entity.domain == light.DOMAIN:
-            if entity_features & SUPPORT_BRIGHTNESS:
-                pass
-
+            pass
         elif entity.domain == climate.DOMAIN:
             temperature = entity.attributes.get(ATTR_TEMPERATURE, 0)
             # Convert 0-100 to 0-255

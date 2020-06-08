@@ -22,9 +22,7 @@ ATTR_COMPONENT_PREFIX = 'component_'
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the Ecovacs vacuums."""
-    vacuums = []
-    for device in hass.data[ECOVACS_DEVICES]:
-        vacuums.append(EcovacsVacuum(device))
+    vacuums = [EcovacsVacuum(device) for device in hass.data[ECOVACS_DEVICES]]
     _LOGGER.debug("Adding Ecovacs Vacuums to Hass: %s", vacuums)
     add_entities(vacuums, True)
 
@@ -62,11 +60,7 @@ class EcovacsVacuum(VacuumDevice):
         This will not change the entity's state. If the error caused the state
         to change, that will come through as a separate on_status event
         """
-        if error == 'no_error':
-            self._error = None
-        else:
-            self._error = error
-
+        self._error = None if error == 'no_error' else error
         self.hass.bus.fire('ecovacs_error', {
             'entity_id': self.entity_id,
             'error': error
@@ -177,9 +171,7 @@ class EcovacsVacuum(VacuumDevice):
     @property
     def device_state_attributes(self):
         """Return the device-specific state attributes of this vacuum."""
-        data = {}
-        data[ATTR_ERROR] = self._error
-
+        data = {ATTR_ERROR: self._error}
         for key, val in self.device.components.items():
             attr_name = ATTR_COMPONENT_PREFIX + key
             data[attr_name] = int(val * 100)

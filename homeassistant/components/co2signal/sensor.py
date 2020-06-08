@@ -36,12 +36,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
 
     _LOGGER.debug("Setting up the sensor using the %s", country_code)
 
-    devs = []
+    devs = [CO2Sensor(token, country_code, lat, lon)]
 
-    devs.append(CO2Sensor(token,
-                          country_code,
-                          lat,
-                          lon))
     add_entities(devs, True)
 
 

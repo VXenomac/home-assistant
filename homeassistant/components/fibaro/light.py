@@ -110,10 +110,7 @@ class FibaroLight(FibaroDevice, Light):
             # last brightness or switch it on at maximum level
             if target_brightness is None:
                 if self._brightness == 0:
-                    if self._last_brightness:
-                        self._brightness = self._last_brightness
-                    else:
-                        self._brightness = 100
+                    self._brightness = self._last_brightness if self._last_brightness else 100
             else:
                 # We set it to the target brightness and turn it on
                 self._brightness = scaleto100(target_brightness)

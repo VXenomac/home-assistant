@@ -17,10 +17,11 @@ async def async_setup_platform(
     switches = discovery_info[CONF_SWITCHES]
     ipcam = hass.data[DATA_IP_WEBCAM][host]
 
-    all_switches = []
+    all_switches = [
+        IPWebcamSettingsSwitch(name, host, ipcam, setting)
+        for setting in switches
+    ]
 
-    for setting in switches:
-        all_switches.append(IPWebcamSettingsSwitch(name, host, ipcam, setting))
 
     async_add_entities(all_switches, True)
 

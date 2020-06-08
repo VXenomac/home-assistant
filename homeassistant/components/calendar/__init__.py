@@ -146,7 +146,7 @@ class CalendarEventDevice(Entity):
 
     def update(self):
         """Search for the next event."""
-        if not self.data or not self.data.update():
+        if not (self.data and self.data.update()):
             # update cached, don't do anything
             return
 
@@ -167,7 +167,7 @@ class CalendarEventDevice(Entity):
         if search and search.group(1):
             time = search.group(1)
             if ':' not in time:
-                if time[0] == '+' or time[0] == '-':
+                if time[0] in ['+', '-']:
                     time = '{}0:{}'.format(time[0], time[1:])
                 else:
                     time = '0:{}'.format(time)

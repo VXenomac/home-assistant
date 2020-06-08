@@ -212,19 +212,18 @@ async def async_setup_platform(hass, config, async_add_entities,
                 # Wait for reader to close
                 await protocol.wait_closed()
 
-            if hass.state != CoreState.stopping:
-                # Unexpected disconnect
-                if transport:
-                    # remove listener
-                    stop_listener()
+            # Unexpected disconnect
+            if transport:
+                # remove listener
+                stop_listener()
 
-                # Reflect disconnect state in devices state by setting an
-                # empty telegram resulting in `unknown` states
-                update_entities_telegram({})
+            # Reflect disconnect state in devices state by setting an
+            # empty telegram resulting in `unknown` states
+            update_entities_telegram({})
 
-                # throttle reconnect attempts
-                await asyncio.sleep(config[CONF_RECONNECT_INTERVAL],
-                                    loop=hass.loop)
+            # throttle reconnect attempts
+            await asyncio.sleep(config[CONF_RECONNECT_INTERVAL],
+                                loop=hass.loop)
 
     # Can't be hass.async_add_job because job runs forever
     hass.loop.create_task(connect_and_reconnect())

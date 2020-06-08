@@ -56,9 +56,7 @@ class EnOceanSwitch(enocean.EnOceanDevice, ToggleEntity):
 
     def turn_on(self, **kwargs):
         """Turn on the switch."""
-        optional = [0x03, ]
-        optional.extend(self.dev_id)
-        optional.extend([0xff, 0x00])
+        optional = [0x03, *self.dev_id, 0xff, 0x00]
         self.send_command(data=[0xD2, 0x01, self.channel & 0xFF, 0x64, 0x00,
                                 0x00, 0x00, 0x00, 0x00], optional=optional,
                           packet_type=0x01)
@@ -66,9 +64,7 @@ class EnOceanSwitch(enocean.EnOceanDevice, ToggleEntity):
 
     def turn_off(self, **kwargs):
         """Turn off the switch."""
-        optional = [0x03, ]
-        optional.extend(self.dev_id)
-        optional.extend([0xff, 0x00])
+        optional = [0x03, *self.dev_id, 0xff, 0x00]
         self.send_command(data=[0xD2, 0x01, self.channel & 0xFF, 0x00, 0x00,
                                 0x00, 0x00, 0x00, 0x00], optional=optional,
                           packet_type=0x01)

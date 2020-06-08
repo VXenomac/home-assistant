@@ -86,6 +86,4 @@ def _authenticate(config):
                         auth=(config[CONF_USERNAME],
                               config[CONF_API_KEY]),
                         timeout=TIMEOUT)
-    if resp.status_code != 200:
-        return False
-    return True
+    return resp.status_code == 200

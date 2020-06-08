@@ -25,7 +25,7 @@ class DemoMailbox(Mailbox):
         super().__init__(hass, name)
         self._messages = {}
         txt = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-        for idx in range(0, 10):
+        for idx in range(10):
             msgtime = int(dt.as_timestamp(
                 dt.utcnow()) - 3600 * 24 * (10 - idx))
             msgtxt = "Message {}. {}".format(

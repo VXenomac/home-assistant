@@ -82,10 +82,7 @@ class EfergySensor(Entity):
                  currency, sid=None):
         """Initialize the sensor."""
         self.sid = sid
-        if sid:
-            self._name = 'efergy_{}'.format(sid)
-        else:
-            self._name = SENSOR_TYPES[sensor_type][0]
+        self._name = 'efergy_{}'.format(sid) if sid else SENSOR_TYPES[sensor_type][0]
         self.type = sensor_type
         self.app_token = app_token
         self.utc_offset = utc_offset

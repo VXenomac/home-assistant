@@ -157,8 +157,7 @@ class AlarmControlPanel(Entity):
     @property
     def state_attributes(self):
         """Return the state attributes."""
-        state_attr = {
+        return {
             ATTR_CODE_FORMAT: self.code_format,
             ATTR_CHANGED_BY: self.changed_by
         }
-        return state_attr

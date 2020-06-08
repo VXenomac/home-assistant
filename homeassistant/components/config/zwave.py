@@ -58,10 +58,7 @@ class ZWaveLogView(HomeAssistantView):
         logfilepath = hass.config.path(OZW_LOG_FILENAME)
         with open(logfilepath, 'r') as logfile:
             data = (line.rstrip() for line in logfile)
-            if lines == 0:
-                loglines = list(data)
-            else:
-                loglines = deque(data, lines)
+            loglines = list(data) if lines == 0 else deque(data, lines)
         return loglines
 
 

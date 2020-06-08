@@ -309,8 +309,7 @@ class _AlexaEntity:
     def serialize_properties(self):
         """Yield each supported property in API format."""
         for interface in self.interfaces():
-            for prop in interface.serialize_properties():
-                yield prop
+            yield from interface.serialize_properties()
 
 
 class _AlexaInterface:

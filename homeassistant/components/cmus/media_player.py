@@ -133,10 +133,7 @@ class CmusDevice(MediaPlayerDevice):
         """Return the volume level."""
         left = self.status['set'].get('vol_left')[0]
         right = self.status['set'].get('vol_right')[0]
-        if left != right:
-            volume = float(left + right) / 2
-        else:
-            volume = left
+        volume = float(left + right) / 2 if left != right else left
         return int(volume)/100
 
     @property
@@ -160,11 +157,7 @@ class CmusDevice(MediaPlayerDevice):
         """Set the volume up."""
         left = self.status['set'].get('vol_left')
         right = self.status['set'].get('vol_right')
-        if left != right:
-            current_volume = float(left + right) / 2
-        else:
-            current_volume = left
-
+        current_volume = float(left + right) / 2 if left != right else left
         if current_volume <= 100:
             self.cmus.set_volume(int(current_volume) + 5)
 
@@ -172,11 +165,7 @@ class CmusDevice(MediaPlayerDevice):
         """Set the volume down."""
         left = self.status['set'].get('vol_left')
         right = self.status['set'].get('vol_right')
-        if left != right:
-            current_volume = float(left + right) / 2
-        else:
-            current_volume = left
-
+        current_volume = float(left + right) / 2 if left != right else left
         if current_volume <= 100:
             self.cmus.set_volume(int(current_volume) - 5)
 

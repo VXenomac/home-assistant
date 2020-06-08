@@ -22,10 +22,10 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     monitored_conditions = discovery_info['monitored_conditions']
     name = discovery_info['client_name']
 
-    dev = []
-    for condition in monitored_conditions:
-        dev.append(EbusdSensor(
-            ebusd_api, discovery_info['sensor_types'][condition], name))
+    dev = [
+        EbusdSensor(ebusd_api, discovery_info['sensor_types'][condition], name)
+        for condition in monitored_conditions
+    ]
 
     add_entities(dev, True)
 
@@ -53,27 +53,27 @@ class EbusdSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return the device state attributes."""
-        if self._type == 1 and self._state is not None:
-            schedule = {
-                TIME_FRAME1_BEGIN: None,
-                TIME_FRAME1_END: None,
-                TIME_FRAME2_BEGIN: None,
-                TIME_FRAME2_END: None,
-                TIME_FRAME3_BEGIN: None,
-                TIME_FRAME3_END: None
-            }
-            time_frame = self._state.split(';')
-            for index, item in enumerate(sorted(schedule.items())):
-                if index < len(time_frame):
-                    parsed = datetime.datetime.strptime(
-                        time_frame[index], '%H:%M')
-                    parsed = parsed.replace(
-                        datetime.datetime.now().year,
-                        datetime.datetime.now().month,
-                        datetime.datetime.now().day)
-                    schedule[item[0]] = parsed.isoformat()
-            return schedule
-        return None
+        if self._type != 1 or self._state is None:
+            return None
+        schedule = {
+            TIME_FRAME1_BEGIN: None,
+            TIME_FRAME1_END: None,
+            TIME_FRAME2_BEGIN: None,
+            TIME_FRAME2_END: None,
+            TIME_FRAME3_BEGIN: None,
+            TIME_FRAME3_END: None
+        }
+        time_frame = self._state.split(';')
+        for index, item in enumerate(sorted(schedule.items())):
+            if index < len(time_frame):
+                parsed = datetime.datetime.strptime(
+                    time_frame[index], '%H:%M')
+                parsed = parsed.replace(
+                    datetime.datetime.now().year,
+                    datetime.datetime.now().month,
+                    datetime.datetime.now().day)
+                schedule[item[0]] = parsed.isoformat()
+        return schedule
 
     @property
     def icon(self):

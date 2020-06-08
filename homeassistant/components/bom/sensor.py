@@ -153,7 +153,7 @@ class BOMCurrentSensor(Entity):
     @property
     def device_state_attributes(self):
         """Return the state attributes of the device."""
-        attr = {
+        return {
             ATTR_ATTRIBUTION: ATTRIBUTION,
             ATTR_LAST_UPDATE: self.bom_data.last_updated,
             ATTR_SENSOR_ID: self._condition,
@@ -161,8 +161,6 @@ class BOMCurrentSensor(Entity):
             ATTR_STATION_NAME: self.bom_data.latest_data['name'],
             ATTR_ZONE_ID: self.bom_data.latest_data['history_product'],
         }
-
-        return attr
 
     @property
     def unit_of_measurement(self):

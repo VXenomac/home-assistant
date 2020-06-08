@@ -66,10 +66,7 @@ class ComedHourlyPricingSensor(Entity):
         """Initialize the sensor."""
         self.loop = loop
         self.websession = websession
-        if name:
-            self._name = name
-        else:
-            self._name = SENSOR_TYPES[sensor_type][0]
+        self._name = name if name else SENSOR_TYPES[sensor_type][0]
         self.type = sensor_type
         self.offset = offset
         self._state = None
@@ -98,8 +95,7 @@ class ComedHourlyPricingSensor(Entity):
     async def async_update(self):
         """Get the ComEd Hourly Pricing data from the web service."""
         try:
-            if self.type == CONF_FIVE_MINUTE or \
-                    self.type == CONF_CURRENT_HOUR_AVERAGE:
+            if self.type in [CONF_FIVE_MINUTE, CONF_CURRENT_HOUR_AVERAGE]:
                 url_string = _RESOURCE
                 if self.type == CONF_FIVE_MINUTE:
                     url_string += '?type=5minutefeed'

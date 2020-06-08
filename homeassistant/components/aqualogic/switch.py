@@ -34,11 +34,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):
     """Set up the switch platform."""
-    switches = []
-
     processor = hass.data[DOMAIN]
-    for switch_type in config.get(CONF_MONITORED_CONDITIONS):
-        switches.append(AquaLogicSwitch(processor, switch_type))
+    switches = [
+        AquaLogicSwitch(processor, switch_type)
+        for switch_type in config.get(CONF_MONITORED_CONDITIONS)
+    ]
+
 
     async_add_entities(switches)
 
@@ -80,8 +81,7 @@ class AquaLogicSwitch(SwitchDevice):
         panel = self._processor.panel
         if panel is None:
             return False
-        state = panel.get_state(self._state_name)
-        return state
+        return panel.get_state(self._state_name)
 
     def turn_on(self, **kwargs):
         """Turn the device on."""

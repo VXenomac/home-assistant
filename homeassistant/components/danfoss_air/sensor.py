@@ -40,11 +40,8 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
          ReadCommand.battery_percent, DEVICE_CLASS_BATTERY]
         ]
 
-    dev = []
-
-    for sensor in sensors:
-        dev.append(DanfossAir(
-            data, sensor[0], sensor[1], sensor[2], sensor[3]))
+    dev = [DanfossAir(
+            data, sensor[0], sensor[1], sensor[2], sensor[3]) for sensor in sensors]
 
     add_entities(dev, True)
 

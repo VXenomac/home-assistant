@@ -227,8 +227,7 @@ class Thermostat(ClimateDevice):
     @property
     def current_operation(self):
         """Return current operation."""
-        if self.operation_mode == 'auxHeatOnly' or \
-                self.operation_mode == 'heatPump':
+        if self.operation_mode in ['auxHeatOnly', 'heatPump']:
             return STATE_HEAT
         return self.operation_mode
 
@@ -265,9 +264,7 @@ class Thermostat(ClimateDevice):
             operation = STATE_IDLE
         elif 'Cool' in status:
             operation = STATE_COOL
-        elif 'auxHeat' in status:
-            operation = STATE_HEAT
-        elif 'heatPump' in status:
+        elif 'auxHeat' in status or 'heatPump' in status:
             operation = STATE_HEAT
         else:
             operation = status
@@ -352,7 +349,7 @@ class Thermostat(ClimateDevice):
 
     def set_fan_mode(self, fan_mode):
         """Set the fan mode.  Valid values are "on" or "auto"."""
-        if (fan_mode.lower() != STATE_ON) and (fan_mode.lower() != STATE_AUTO):
+        if fan_mode.lower() not in [STATE_ON, STATE_AUTO]:
             error = "Invalid fan_mode value:  Valid values are 'on' or 'auto'"
             _LOGGER.error(error)
             return
@@ -376,8 +373,7 @@ class Thermostat(ClimateDevice):
         heatCoolMinDelta property.
         https://www.ecobee.com/home/developer/api/examples/ex5.shtml
         """
-        if self.current_operation == STATE_HEAT or self.current_operation == \
-                STATE_COOL:
+        if self.current_operation in [STATE_HEAT, STATE_COOL]:
             heat_temp = temp
             cool_temp = temp
         else:

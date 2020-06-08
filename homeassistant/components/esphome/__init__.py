@@ -282,10 +282,8 @@ async def async_setup_entry(hass: HomeAssistantType,
 
     async def complete_setup() -> None:
         """Complete the config entry setup."""
-        tasks = []
-        for component in HA_COMPONENTS:
-            tasks.append(hass.config_entries.async_forward_entry_setup(
-                entry, component))
+        tasks = [hass.config_entries.async_forward_entry_setup(
+                entry, component) for component in HA_COMPONENTS]
         await asyncio.wait(tasks)
 
         infos, services = await entry_data.async_load_from_store()
@@ -449,10 +447,8 @@ async def async_unload_entry(hass: HomeAssistantType,
     """Unload an esphome config entry."""
     await _cleanup_instance(hass, entry)
 
-    tasks = []
-    for component in HA_COMPONENTS:
-        tasks.append(hass.config_entries.async_forward_entry_unload(
-            entry, component))
+    tasks = [hass.config_entries.async_forward_entry_unload(
+            entry, component) for component in HA_COMPONENTS]
     await asyncio.wait(tasks)
 
     return True

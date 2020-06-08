@@ -78,12 +78,10 @@ class SmartPlugSwitch(SwitchDevice):
         except (ValueError, TypeError):
             total_consumption = None
 
-        attrs = {
+        return {
             ATTR_TOTAL_CONSUMPTION: total_consumption,
             ATTR_TEMPERATURE: temperature,
         }
-
-        return attrs
 
     @property
     def current_power_w(self):

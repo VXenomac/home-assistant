@@ -57,8 +57,8 @@ def request_configuration(hass, config, url, add_entities_callback):
 
     def gpmdp_configuration_callback(callback_data):
         """Handle configuration changes."""
+        from websocket import _exceptions
         while True:
-            from websocket import _exceptions
             try:
                 msg = json.loads(websocket.recv())
             except _exceptions.WebSocketConnectionClosedException:
@@ -182,9 +182,8 @@ class GPMDP(MediaPlayerDevice):
                 return
             while True:
                 msg = json.loads(websocket.recv())
-                if 'requestID' in msg:
-                    if msg['requestID'] == self._request_id:
-                        return msg
+                if 'requestID' in msg and msg['requestID'] == self._request_id:
+                    return msg
         except (ConnectionRefusedError, ConnectionResetError,
                 _exceptions.WebSocketTimeoutException,
                 _exceptions.WebSocketProtocolException,

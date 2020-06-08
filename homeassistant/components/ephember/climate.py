@@ -102,10 +102,9 @@ class EphEmberThermostat(ClimateDevice):
     @property
     def device_state_attributes(self):
         """Show Device Attributes."""
-        attributes = {
+        return {
             'currently_active': self._zone['isCurrentlyActive']
         }
-        return attributes
 
     @property
     def current_operation(self):

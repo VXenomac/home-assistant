@@ -13,10 +13,11 @@ SCAN_INTERVAL = timedelta(seconds=5)
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up August cameras."""
     data = hass.data[DATA_AUGUST]
-    devices = []
+    devices = [
+        AugustCamera(data, doorbell, DEFAULT_TIMEOUT)
+        for doorbell in data.doorbells
+    ]
 
-    for doorbell in data.doorbells:
-        devices.append(AugustCamera(data, doorbell, DEFAULT_TIMEOUT))
 
     add_entities(devices, True)
 

@@ -160,10 +160,13 @@ class Monitor:
                       namespace, instance, temperature)
 
         for dev in self.devices:
-            if dev.namespace == namespace and dev.instance == instance:
-                if dev.temperature != temperature:
-                    dev.temperature = temperature
-                    dev.schedule_update_ha_state()
+            if (
+                dev.namespace == namespace
+                and dev.instance == instance
+                and dev.temperature != temperature
+            ):
+                dev.temperature = temperature
+                dev.schedule_update_ha_state()
 
     def stop(self):
         """Signal runner to stop and join thread."""

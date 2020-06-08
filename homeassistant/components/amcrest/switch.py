@@ -19,10 +19,7 @@ async def async_setup_platform(
     switches = discovery_info[CONF_SWITCHES]
     camera = hass.data[DATA_AMCREST][name].device
 
-    all_switches = []
-
-    for setting in switches:
-        all_switches.append(AmcrestSwitch(setting, camera, name))
+    all_switches = [AmcrestSwitch(setting, camera, name) for setting in switches]
 
     async_add_entities(all_switches, True)
 

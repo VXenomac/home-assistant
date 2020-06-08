@@ -127,10 +127,7 @@ class GoogleWifiSensor(Entity):
     def update(self):
         """Get the latest data from the Google Wifi API."""
         self._api.update()
-        if self.available:
-            self._state = self._api.data[self._var_name]
-        else:
-            self._state = None
+        self._state = self._api.data[self._var_name] if self.available else None
 
 
 class GoogleWifiAPI:
@@ -189,10 +186,7 @@ class GoogleWifiAPI:
                         sensor_value = last_restart.strftime(
                             '%Y-%m-%d %H:%M:%S')
                     elif attr_key == ATTR_STATUS:
-                        if sensor_value:
-                            sensor_value = 'Online'
-                        else:
-                            sensor_value = 'Offline'
+                        sensor_value = 'Online' if sensor_value else 'Offline'
                     elif attr_key == ATTR_LOCAL_IP:
                         if not self.raw_data['wan']['online']:
                             sensor_value = STATE_UNKNOWN

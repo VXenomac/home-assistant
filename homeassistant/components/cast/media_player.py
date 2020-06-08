@@ -170,8 +170,8 @@ def _discover_chromecast(hass: HomeAssistantType, info: ChromecastInfo):
 
     if info.uuid is not None:
         # Remove previous cast infos with same uuid from known chromecasts.
-        same_uuid = set(x for x in hass.data[KNOWN_CHROMECAST_INFO_KEY]
-                        if info.uuid == x.uuid)
+        same_uuid = {x for x in hass.data[KNOWN_CHROMECAST_INFO_KEY]
+                                if info.uuid == x.uuid}
         hass.data[KNOWN_CHROMECAST_INFO_KEY] -= same_uuid
 
     hass.data[KNOWN_CHROMECAST_INFO_KEY].add(info)
@@ -300,7 +300,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     done, _ = await asyncio.wait([
         _async_setup_platform(hass, cfg, async_add_entities, None)
         for cfg in config])
-    if any([task.exception() for task in done]):
+    if any(task.exception() for task in done):
         exceptions = [task.exception() for task in done]
         for exception in exceptions:
             _LOGGER.debug("Failed to setup chromecast", exc_info=exception)
@@ -489,8 +489,7 @@ class CastDevice(MediaPlayerDevice):
         self._cast_info = cast_info  # type: ChromecastInfo
         self.services = None
         if cast_info.service:
-            self.services = set()
-            self.services.add(cast_info.service)
+            self.services = {cast_info.service}
         self._chromecast = None  # type: Optional[pychromecast.Chromecast]
         self.cast_status = None
         self.media_status = None
@@ -1113,7 +1112,6 @@ class CastDevice(MediaPlayerDevice):
         if media_status:
             if media_status.supports_queue_next:
                 support |= SUPPORT_PREVIOUS_TRACK
-            if media_status.supports_queue_next:
                 support |= SUPPORT_NEXT_TRACK
             if media_status.supports_seek:
                 support |= SUPPORT_SEEK

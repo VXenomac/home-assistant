@@ -139,9 +139,7 @@ class PublicTransportData:
 
     def update(self):
         """Get the latest data from opendata.ch."""
-        params = {}
-        params['stopid'] = self.stop
-
+        params = {'stopid': self.stop}
         if self.route:
             params['routeid'] = self.route
 

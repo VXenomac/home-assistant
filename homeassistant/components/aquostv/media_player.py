@@ -121,20 +121,14 @@ class SharpAquosTVDevice(MediaPlayerDevice):
     @_retry
     def update(self):
         """Retrieve the latest data."""
-        if self._remote.power() == 1:
-            self._state = STATE_ON
-        else:
-            self._state = STATE_OFF
+        self._state = STATE_ON if self._remote.power() == 1 else STATE_OFF
         # Set TV to be able to remotely power on
         if self._power_on_enabled:
             self._remote.power_on_command_settings(2)
         else:
             self._remote.power_on_command_settings(0)
         # Get mute state
-        if self._remote.mute() == 2:
-            self._muted = False
-        else:
-            self._muted = True
+        self._muted = False if self._remote.mute() == 2 else True
         # Get source
         self._source = SOURCES.get(self._remote.input())
         # Get volume

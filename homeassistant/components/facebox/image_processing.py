@@ -66,8 +66,7 @@ def check_box_health(url, username, password):
 
 def encode_image(image):
     """base64 encode an image stream."""
-    base64_img = base64.b64encode(image).decode('ascii')
-    return base64_img
+    return base64.b64encode(image).decode('ascii')
 
 
 def get_matched_faces(faces):
@@ -229,8 +228,10 @@ class FaceClassifyEntity(ImageProcessingFaceEntity):
 
     def teach(self, name, file_path):
         """Teach classifier a face name."""
-        if (not self.hass.config.is_allowed_path(file_path)
-                or not valid_file_path(file_path)):
+        if not (
+            self.hass.config.is_allowed_path(file_path)
+            and valid_file_path(file_path)
+        ):
             return
         teach_file(
             self._url_teach, name, file_path, self._username, self._password)

@@ -39,10 +39,7 @@ async def async_setup_platform(hass, config, async_add_devices,
     hostname = config.get(CONF_HOSTNAME)
     name = config.get(CONF_NAME)
     if not name:
-        if hostname == DEFAULT_HOSTNAME:
-            name = DEFAULT_NAME
-        else:
-            name = hostname
+        name = DEFAULT_NAME if hostname == DEFAULT_HOSTNAME else hostname
     ipv6 = config.get(CONF_IPV6)
     if ipv6:
         resolver = config.get(CONF_RESOLVER_IPV6)
@@ -86,7 +83,4 @@ class WanIpSensor(Entity):
         except DNSError as err:
             _LOGGER.warning("Exception while resolving host: %s", err)
             response = None
-        if response:
-            self._state = response[0].host
-        else:
-            self._state = None
+        self._state = response[0].host if response else None
